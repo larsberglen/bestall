@@ -14,7 +14,7 @@ export default Ember.Controller.extend({
 
   displayTypeOfLoan: Ember.computed('order.model.reserve.isReservedClicked', function() {
     // typeofloan shoule not be displayed if user has clicked the reserve-button
-    if  (this.get("order.model.reserve.isReservedClicked")) {
+    if (this.get("order.model.reserve.isReservedClicked")) {
       return false;
     }
     return true;
@@ -50,6 +50,12 @@ export default Ember.Controller.extend({
       item.set('disabled', false);
     });
 
+    // If pickup location is closed, disable location in dropdown list
+    locations.map((item) => {
+      if (item.get('pickupLocationClosed')) {
+        item.set('disabled', true);
+      }
+    });
     //let applyFilter = this.get('order.model.reserve.applyFilter');
     let filter = this.get('applyFilter');
     if (!filter) {
@@ -117,8 +123,7 @@ export default Ember.Controller.extend({
         if (that.get('order.model.reserve.subscriptionNotes')) {
           return true;
         }
-      }
-      else {
+      } else {
         return true;
       }
       return false;
@@ -134,10 +139,9 @@ export default Ember.Controller.extend({
     setLocation(id) {
       if (id != null) {
         let location = this.get('store').peekRecord('location', id);
-        this.get('order.model.reserve').set('location', location);      
-      }
-      else {
-         this.get('order.model.reserve').set('location', null); 
+        this.get('order.model.reserve').set('location', location);
+      } else {
+        this.get('order.model.reserve').set('location', null);
       }
 
     },
